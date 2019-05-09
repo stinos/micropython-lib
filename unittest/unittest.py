@@ -1,4 +1,5 @@
 import sys
+import uio
 
 
 class SkipTest(Exception):
@@ -197,10 +198,12 @@ def run_class(c, test_result):
             except SkipTest as e:
                 print(" skipped:", e.args[0])
                 test_result.skippedNum += 1
-            except:
+            except Exception as e:
                 print(" FAIL")
                 test_result.failuresNum += 1
-                # Uncomment to investigate failure in detail
+                with uio.StringIO() as s:
+                    sys.print_exception(e, s)
+                    print(s.getvalue())
                 #raise
                 continue
             finally:
